@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "^5.7.4",
+    "@mikro-orm/migrations": "^5.7.4",
     "@mikro-orm/postgresql": "^5.7.4",
     "@mikro-orm/reflection": "^5.7.4",
     "@mikro-orm/seeder": "^5.7.4",

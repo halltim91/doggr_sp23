@@ -14,6 +14,28 @@ async function DoggrRoutes(app: FastifyInstance, _options={}){
 	app.get("/dbTest", async (request: FastifyRequest, reply: FastifyReply) => {
 		return request.em.find(User, {});
 	});
+
+	//core method for adding generic SEARCH method
+	// We have to use .route() here because we need a non-standard http method, SEARCH
+	// app.route<{Body: { email: string}}>(
+	// 	{
+	// 		method: "SEARCH",
+	// 		url: "/users",
+	//
+	// 		handler: async(req, reply) =>
+	// 		{
+	// 			const { email } = req.body;
+	// 			console.log("Email is: ", email);
+	// 			try {
+	// 				const theUser = await req.em.findOne(User, { email });
+	// 				console.log(theUser);
+	// 				reply.send(theUser);
+	// 			} catch (err) {
+	// 				console.error(err);
+	// 				reply.status(500).send(err);
+	// 			}
+	// 		}
+	// 	});
 	
 	app.post<{ Body: ICreateUsersBody }>("/users", async (req,reply) => {
 		const {name, email, petType} = req.body;
@@ -31,6 +53,55 @@ async function DoggrRoutes(app: FastifyInstance, _options={}){
 		} catch (err) {
 			console.log("Failed to create new user", err.message);
 			return reply.status(500).send(err.message);
+		}
+	});
+
+
+	//CRUD operations
+
+	//READ
+	app.search<{Body: { email: string}}>("/users", async (req, reply) => {
+		const {email} = req.body;
+
+		try {
+			const theUser = await req.em.findOne(User, {email});
+			console.log(theUser);
+			reply.send(theUser);
+		} catch (err) {
+			console.error(err);
+			reply.status(500)
+				.send(err);
+		}
+	});
+
+	//UPDATE
+	app.put<{Body: ICreateUsersBody}>("/users", async (req, reply) => {
+		const {name, email, petType} = req.body;
+
+		const userToChange = await req.em.findOne(User, {email});
+		userToChange.name = name;
+		userToChange.petType = petType;
+
+		//flush persists our JS object changes to the DB itself
+		await req.em.flush();
+		console.log(userToChange);
+		reply.send(userToChange);
+	});
+
+	//DELETE
+	app.delete<{Body: { email: string}}>("/users", async (req, reply)=>{
+		const {email} = req.body;
+
+		try {
+			const theUser = await req.em.findOne(User, {email});
+			await req.em.remove(theUser).flush();
+			req.em.flush();
+			console.log(theUser);
+			reply.send(theUser);
+		} catch (err) {
+			console.error(err);
+			reply.status(500)
+				.send(err);
 		}
 	});
 }

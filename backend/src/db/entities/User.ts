@@ -13,4 +13,7 @@ export class User extends BaseEntity {
 	
 	@Property()
 	petType!: string;
+
+	@Property()
+	isMatched: boolean = false;
 }

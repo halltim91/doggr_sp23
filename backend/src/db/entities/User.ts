@@ -1,4 +1,4 @@
-import {Collection, Entity, EntitySchema, OneToMany, PrimaryKey, Property, Unique} from "@mikro-orm/core";
+import {Entity, Property, Unique} from "@mikro-orm/core";
 import { BaseEntity } from "./BaseEntity.js";
 
 @Entity({tableName: "users"})
@@ -8,12 +8,11 @@ export class User extends BaseEntity {
 	@Unique()
 	email!: string;
 
-	@Property()
-	name!: string;
-	
-	@Property()
-	petType!: string;
+	@Property({length: 25})
+	@Unique()
+	userName!: string;
 
-	@Property()
-	isMatched: boolean = false;
+	@Property({length: 16})
+	password!: string;
+
 }

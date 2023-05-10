@@ -2,7 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import {TsMorphMetadataProvider} from "@mikro-orm/reflection";
 import {defineConfig} from "@mikro-orm/postgresql";
-import { User } from "./entities/User.js";
+import {User} from "./entities/User.js";
+import {Npc} from "./entities/Npc.js";
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,7 +19,7 @@ const migrationsTSPath = path.join(__dirname, "migrations");
 
 export default defineConfig({
 	entities: ['./entities/*.js'],
-	entitiesTs: [User],
+	entitiesTs: [User, Npc],
 	tsNode: true,
 	dbName: process.env.DB_NAME,
 	port: Number(process.env.DB_PORT),

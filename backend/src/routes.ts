@@ -1,5 +1,5 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {ICreateUsersBody} from "./ types.js";
+import {ICreateUsersBody} from "./types.js";
 import app from "./app.js";
 import {User} from "./db/entities/User.js";
 

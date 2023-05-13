@@ -1,11 +1,5 @@
 import { User } from "./db/entities/User";
 
-export type ICreateUsersBody = {
-	name: string,
-	email: string,
-	petType: string
-}
-
 export type INpcBody = {
 	name: string,
 	age: number,

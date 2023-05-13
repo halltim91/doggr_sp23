@@ -27,8 +27,34 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
-	//get user
+	//get user/ check password?
+	app.search<{Body: {uName: string, pWord: string}}>("/users", async (req, reply) => {
+		const {uName, pWord} = req.body;
+		try{
+			const theUser = await req.em.findOne(User, {uName});
+			if(theUser.password == pWord)
+				reply.send(theUser);
+			else
+				reply.status(400).send("Invalid password");
+		} catch(err){
+			reply.status(500).send(err);
+		}
+	});
+	//update user??
+
 	//delete user
+	app.delete<{Body: {userName: string}}>("/users", async (req, reply) => {
+		const {userName} = req.body;
+
+		try {
+			const theUser = await req.em.findOne(User, {userName});
+			await req.em.remove(theUser).flush();
+			reply.send(theUser);
+		} catch(err){
+			reply.status(500).send(err);
+		}
+	});
+
 	//get user npc list
 	//get public npc list
 	//add npc

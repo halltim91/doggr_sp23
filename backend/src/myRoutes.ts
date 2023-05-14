@@ -22,7 +22,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			console.log("created new user:", newUser);
 			return reply.send(newUser);
 		} catch(err) {
-			console.log("Failed to create new user", err.message);
+			console.log("Failed to add new user", err.message);
 			return reply.status(500).send(err.message);
 		}
 	});
@@ -40,7 +40,25 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			reply.status(500).send(err);
 		}
 	});
-	//update user??
+
+	//update user
+	app.put<{Body: IUserBody}>("/user", async (req, reply) => {
+		const {email, username, password} = req.body;
+
+		try {
+			const userToChange = await req.em.findOne(User, {username});
+			userToChange.email = email,
+			userToChange.userName = username,
+			userToChange.password = password;
+			await req.em.flush();
+
+			console.log("User updated:", userToChange);
+			return reply.send(userToChange);
+		} catch(err) {
+			console.log("Failed to update user", err.message);
+			return reply.status(500).send(err.message);
+		}
+	});
 
 	//delete user
 	app.delete<{Body: {userName: string}}>("/users", async (req, reply) => {
@@ -55,9 +73,33 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
+	//add npc
+	app.post<{ Body: INpcBody }>("/npcs", async (req, reply) => {
+		const {name, age, gender, race, haircolor, height, background, notes,
+			isPublic, owner} = req.body;
+		try{
+			const newNpc = await req.em.create(Npc, {
+				name: name,
+				age: age,
+				gender: gender,
+				race: race,
+				hairColor: haircolor,
+				height: height,
+				background: background,
+				notes:  notes,
+				isPublic: isPublic,
+				owner: owner
+			});
+			await req.em.flush();
+			console.log("added NPC: ", newNpc);
+			reply.send(newNpc);
+		} catch (err){
+			console.log("Failed to add new NPC", err);
+			reply.status(500).send(err);
+		}
+	});
 	//get user npc list
 	//get public npc list
-	//add npc
 	//mark npc as public
 	//delete npc (only from user list if private)
 }

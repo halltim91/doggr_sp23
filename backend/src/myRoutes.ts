@@ -37,6 +37,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			else
 				reply.status(400).send("Invalid password");
 		} catch(err){
+			console.log("Failed to add new user", err);
 			reply.status(500).send(err);
 		}
 	});
@@ -46,7 +47,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		const {email, username, password} = req.body;
 
 		try {
-			const userToChange = await req.em.findOne(User, {username});
+			const userToChange = await req.em.findOne(User, {userName: username});
 			userToChange.email = email,
 			userToChange.userName = username,
 			userToChange.password = password;
@@ -98,8 +99,33 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			reply.status(500).send(err);
 		}
 	});
+
+	// get public npc list
+	app.get<{Body: {start: number, end: number}}>("/npc", async (req, reply) => {
+		const {start, end} = req.body;
+		try {
+			const list = await req.em.find(Npc, {isPublic: true});
+			reply.send(list.slice(start, end));
+		} catch(err) {
+			console.log("Failed to get public npc list between " + start + "-" + end, err);
+			reply.status(500).send(err);
+		}
+	});
+
 	//get user npc list
-	//get public npc list
-	//mark npc as public
-	//delete npc (only from user list if private)
+	app.get<{Body: {userName: string, start: number, end: number}}>("/npc/user", async (req, reply) => {
+		const {userName, start, end} = req.body;
+		try {
+			const theUser = await req.em.find(User, {userName});
+
+			//TODO Potential to only grab the details we need here^^
+			const list = await req.em.find(Npc, {owner: theUser});
+			reply.send(list.slice(start, end));
+		} catch(err){
+			console.log("Failed to load users NPC list", err);
+			reply.status(500).send(err);
+		}
+	});
+
+	//delete npc (only from user list if private
 }

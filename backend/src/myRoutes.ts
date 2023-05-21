@@ -66,10 +66,11 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		const {userName} = req.body;
 
 		try {
-			const theUser = await req.em.findOne(User, {userName});
+			const theUser = await req.em.findOneOrFail(User, {userName});
 			await req.em.remove(theUser).flush();
 			reply.send(theUser);
 		} catch(err){
+			console.log("Failed to delete user", err);
 			reply.status(500).send(err);
 		}
 	});
@@ -131,7 +132,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	app.delete<{Body: INpcBody}>("/npc/user", async (req, reply)=> {
 		const {name, owner} = req.body;
 		try{
-			const n = await req.em.findOne(Npc, {name: name, owner: owner});
+			const n = await req.em.findOneOrFail(Npc, {name: name, owner: owner});
 			req.em.remove(n).flush();
 			reply.send(n);
 		} catch (err) {

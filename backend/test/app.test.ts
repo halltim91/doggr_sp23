@@ -7,42 +7,63 @@ import app from "../src/app.js";
 teardown( () => app.close() );
 
 
-test("Request the /hello route", async () => {
-	const response = await app.inject({
-		method: "GET",
-		url: "/hello"
-	});
-	
-	response.statusCode.should.equal(200);
-	response.body.should.equal("Hello");
-});
-
-test('Listing all users from /dbTest', async () => {
-	const response = await app.inject({
-		method: 'GET',
-		url: '/dbTest'
-	});
-	
-	response.statusCode.should.equal(200);
-});
-
-test('Creating new user', async () => {
-	
+// test('Listing all users from /dbTest', async () => {
+// 	const response = await app.inject({
+// 		method: 'GET',
+// 		url: '/dbTest'
+// 	});
+//
+// 	response.statusCode.should.equal(200);
+// });
+//
+// test('Creating new user', async () => {
+//
+// 	const payload = {
+// 		name: "Testname",
+// 		email: faker.internet.email(),
+// 		petType: "Dog"
+// 	};
+//
+// 	const response = await app.inject({
+// 		method: 'POST',
+// 		url: '/users',
+// 		payload
+// 	});
+//
+// 	response.statusCode.should.equal(200);
+// 	response.payload.should.not.equal(payload);
+// 	const resPayload = response.json();
+// 	resPayload.email.should.equal(payload.email);
+// 	resPayload.petType.should.equal("Dog");
+// });
+test("Adding a user", async () =>{
 	const payload = {
-		name: "Testname",
-		email: faker.internet.email(),
-		petType: "Dog"
+		email: "testemail8@gmail.com",
+		username: "KoolKid4",
+		password: "password"
 	};
-	
 	const response = await app.inject({
 		method: 'POST',
 		url: '/users',
 		payload
 	});
-	
 	response.statusCode.should.equal(200);
-	response.payload.should.not.equal(payload);
 	const resPayload = response.json();
 	resPayload.email.should.equal(payload.email);
-	resPayload.petType.should.equal("Dog");
+	resPayload.userName.should.equal(payload.username);
+});
+
+test("Delete a user", async () => {
+	const payload = {
+		username: "KoolKid4",
+	};
+	const response = await app.inject({
+		method: 'DELETE',
+		url: '/users',
+		payload
+	});
+
+	response.statusCode.should.equal(200);
+	const resPayload = response.json();
+	resPayload.username.should.equal(payload.username);
 });

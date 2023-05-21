@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { IUserBody, INpcBody} from "./types.js";
 import { User } from "./db/entities/User.js";
-import { Npc } from "./db/entities/Npc";
+import { Npc } from "./db/entities/Npc.js";
 async function NpcRoutes(app: FastifyInstance, _options ={}){
 	if(!app){
 		throw new Error("Fastify instance has no value during routes construction");
@@ -128,4 +128,41 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	});
 
 	//delete npc (only from user list if private
+	app.delete<{Body: INpcBody}>("/npc/user", async (req, reply)=> {
+		const {name, owner} = req.body;
+		try{
+			const n = await req.em.findOne(Npc, {name: name, owner: owner});
+			req.em.remove(n).flush();
+			reply.send(n);
+		} catch (err) {
+			console.log("Failed to delete Npc", err);
+			reply.status(500).send(err);
+		}
+
+	});
+
+	// update Npc
+	app.put<{Body: {origName: string, info:INpcBody}}>("/npc/user", async (req, reply) => {
+		const {origName, info} = req.body;
+		try {
+			const npc = await req.em.findOne(Npc, { name: origName,	owner: info.owner });
+			npc.name = info.name;
+			npc.age = info.age;
+			npc.gender = info.gender;
+			npc.race = info.race;
+			npc.hairColor = info.haircolor;
+			npc.height = info.height;
+			npc.background = info.background;
+			npc.notes = info.notes;
+			npc.isPublic = info.isPublic;
+			await req.em.flush();
+			reply.send(npc);
+
+		} catch(err){
+			console.log("Failed to update npc", err);
+			reply.status(500).send(err);
+		}
+	});
 }
+
+export default NpcRoutes;

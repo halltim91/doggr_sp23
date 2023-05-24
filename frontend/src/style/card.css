@@ -1,18 +1,23 @@
 .card {
+    display: block;
     background-color: #213547;
-    padding: 1vw;
+    padding: 0;
     border-radius: 10px;
+    border: 1px solid green;
 }
 
 .card .header {
     display: block;
     text-align: left;
-    width: 100%;
-    background-color: chartreuse;
+    padding-left: 5%;
+    MARGIN: 0;
+    background-color: purple;
+
 }
 
 .card .body {
     display: block;
-    width: 100%;
     text-align: left;
+    border: 1px solid orange;
+    margin-top: 5%;
 }

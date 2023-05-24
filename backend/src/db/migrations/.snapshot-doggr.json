@@ -177,6 +177,17 @@
           "primary": false,
           "nullable": false,
           "length": 25,
+          "default": "''",
+          "mappedType": "string"
+        },
+        "eye_color": {
+          "name": "eye_color",
+          "type": "varchar(25)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 25,
           "mappedType": "string"
         },
         "height": {

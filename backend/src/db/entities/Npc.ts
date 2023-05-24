@@ -20,6 +20,9 @@ export class Npc extends BaseEntity {
 	@Property({length: 25})
 	hairColor: string;
 
+	@Property({length: 25})
+	eyeColor: string;
+
 	@Property({length: 10})
 	height: string;
 

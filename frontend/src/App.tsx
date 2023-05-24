@@ -1,12 +1,13 @@
 import './style/App.css';
-import {Header} from "./components/components";
+import { Header, NpcList } from "./components/components";
 import {CondensedNpcCard} from "./components/npcCard";
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <CondensedNpcCard name="testname" race="Orc" />
+      <NpcList />
+      {/*<CondensedNpcCard name="testname" race="Orc" />*/}
     </div> );
 }
 

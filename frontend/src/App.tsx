@@ -1,5 +1,5 @@
 import './style/App.css';
-import { Header, NpcList } from "./components/components";
+import { Footer, Header, NpcList } from "./components/components";
 import {CondensedNpcCard} from "./components/npcCard";
 
 function App() {
@@ -7,6 +7,7 @@ function App() {
     <div className="App">
       <Header />
       <NpcList />
+      <Footer />
       {/*<CondensedNpcCard name="testname" race="Orc" />*/}
     </div> );
 }

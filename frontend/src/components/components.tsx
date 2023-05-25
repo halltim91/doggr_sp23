@@ -12,13 +12,17 @@ export const Header = () => {
 }
 
 export const NpcList = () => {
-	return(<div className="npcList">
+	return(<div className="npcList"><button>Test</button></div>)
+}
+
+export const Footer = () =>{
+	return (<div className="footer">
 		<div className="navigation">
 			<button>First</button>
 			<button>Previous</button>
-			<p>X of XX</p>
+			<p id="pageOf">X of XX</p>
 			<button>Next</button>
 			<button>Last</button>
 		</div>
-	</div>)
+	</div>);
 }

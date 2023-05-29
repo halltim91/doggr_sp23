@@ -49,7 +49,8 @@ services:
       - PORT=8080
       - HOST=0.0.0.0
       - PASSWORD=password
-      - NODE_ENV=development
+      - NODE_ENV=[development|production]
+      - AUTH_SECRET=supersecret219340818092358
     depends_on:
       postgres:
         condition: service_healthy

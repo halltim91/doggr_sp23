@@ -48,8 +48,8 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 
 		try {
 			const userToChange = await req.em.findOne(User, {userName: username});
-			userToChange.email = email,
-			userToChange.userName = username,
+			userToChange.email = email;
+			userToChange.userName = username;
 			userToChange.password = password;
 			await req.em.flush();
 
@@ -113,17 +113,37 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
-	//get user npc list
-	app.get<{Body: {userName: string, start: number, end: number}}>("/npc/user", async (req, reply) => {
-		const {userName, start, end} = req.body;
+	//get public npc list count
+	app.get("/npc/count", async (req, reply) => {
 		try {
-			const theUser = await req.em.find(User, {userName});
+			const count = await req.em.count(Npc, {isPublic: true});
+			reply.send(count);
+		} catch(err) {
+			console.log("Failed to get count of public npc list", err);
+			reply.status(500).send(err);
+		}
+	});
 
-			//TODO Potential to only grab the details we need here^^
-			const list = await req.em.find(Npc, {owner: theUser});
+	//get user npc list
+	app.get<{Body: {id: number, start: number, end: number}}>("/npc/user", async (req, reply) => {
+		const {id, start, end} = req.body;
+		try {
+			const list = await req.em.find(Npc, {owner: id});
 			reply.send(list.slice(start, end));
 		} catch(err){
 			console.log("Failed to load users NPC list", err);
+			reply.status(500).send(err);
+		}
+	});
+
+	//get user npc list count
+	app.get<{Body: {owner_id: number}}>("/npc/user/count", async (req, reply) => {
+		const { owner_id } = req.body;
+		try {
+			const count = await req.em.count(Npc, {owner: owner_id});
+			reply.send(count);
+		} catch(err) {
+			console.log("Failed to get count of public npc list", err);
 			reply.status(500).send(err);
 		}
 	});

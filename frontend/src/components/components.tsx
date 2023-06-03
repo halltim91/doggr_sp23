@@ -11,10 +11,6 @@ export const Header = () => {
 	</div> );
 }
 
-export const NpcList = () => {
-	return(<div className="npcList"><button>Test</button></div>)
-}
-
 export const Footer = () =>{
 	return (<div className="footer">
 		<div className="navigation">

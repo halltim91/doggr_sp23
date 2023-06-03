@@ -52,7 +52,6 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			userToChange.userName = username;
 			userToChange.password = password;
 			await req.em.flush();
-
 			console.log("User updated:", userToChange);
 			return reply.send(userToChange);
 		} catch(err) {

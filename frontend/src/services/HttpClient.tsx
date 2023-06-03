@@ -4,7 +4,7 @@ const serverIP = import.meta.env.API_HOST;
 const serverPort = import.meta.env.PORT;
 
 const serverUrl = `http://${serverIP}:${serverPort}`;
-
+console.log("URL: " + serverUrl);
 // This is why I use Axios over Fetch
 export const httpClient = axios.create({
 	baseURL: serverUrl,

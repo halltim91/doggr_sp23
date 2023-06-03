@@ -1,5 +1,6 @@
 import './style/App.css';
-import { Footer, Header, NpcList } from "./components/components";
+import { Footer, Header } from "./components/components";
+import {NpcList} from "./components/NpcList.tsx";
 import {CondensedNpcCard} from "./components/npcCard";
 
 function App() {

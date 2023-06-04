@@ -8,9 +8,8 @@ import NpcRoutes from "./myRoutes.js";
 const app = Fastify();
 
 await app.register(cors, {
-	origin: (origin, cb) => {
-		cb(null, true);
-	}
+	origin: "*",
+	methods: "*"
 });
 await app.register(FastifyMikroOrmPlugin, config);
 await app.register(FastifySearchHttpMethodPlugin);

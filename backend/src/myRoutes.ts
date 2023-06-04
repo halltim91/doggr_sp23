@@ -31,7 +31,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	app.search<{Body: {uName: string, pWord: string}}>("/users", async (req, reply) => {
 		const {uName, pWord} = req.body;
 		try{
-			const theUser = await req.em.findOne(User, {uName});
+			const theUser = await req.em.findOne(User, {userName: uName});
 			if(theUser.password == pWord)
 				reply.send(theUser);
 			else
@@ -101,7 +101,8 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	});
 
 	// get public npc list
-	app.get<{Body: {start: number, end: number}}>("/npc", async (req, reply) => {
+	app.search<{Body: {start: number, end: number}}>("/npc", async (req, reply) => {
+		console.log(req);
 		const {start, end} = req.body;
 		try {
 			const list = await req.em.find(Npc, {isPublic: true});
@@ -124,7 +125,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	});
 
 	//get user npc list
-	app.get<{Body: {id: number, start: number, end: number}}>("/npc/user", async (req, reply) => {
+	app.search<{Body: {id: number, start: number, end: number}}>("/npc/user", async (req, reply) => {
 		const {id, start, end} = req.body;
 		try {
 			const list = await req.em.find(Npc, {owner: id});

@@ -137,10 +137,10 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	});
 
 	//get user npc list count
-	app.get<{Body: {owner_id: number}}>("/npc/user/count", async (req, reply) => {
-		const { owner_id } = req.body;
+	app.get<{Params: {id: number}}>("/npc/:id", async (req, reply) => {
+		const { id } = req.params;
 		try {
-			const count = await req.em.count(Npc, {owner: owner_id});
+			const count = await req.em.count(Npc, {owner: id});
 			reply.send(count);
 		} catch(err) {
 			console.log("Failed to get count of public npc list", err);

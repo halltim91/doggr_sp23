@@ -76,7 +76,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 
 	//add npc
 	app.post<{ Body: INpcBody }>("/npcs", async (req, reply) => {
-		const {name, age, gender, race, haircolor, height, background, notes,
+		const {name, age, gender, race, hairColor, height, background, notes,
 			isPublic, owner} = req.body;
 		try{
 			const newNpc = await req.em.create(Npc, {
@@ -84,7 +84,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 				age: age,
 				gender: gender,
 				race: race,
-				hairColor: haircolor,
+				hairColor: hairColor,
 				height: height,
 				background: background,
 				notes:  notes,
@@ -102,7 +102,6 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 
 	// get public npc list
 	app.search<{Body: {start: number, end: number}}>("/npc", async (req, reply) => {
-		console.log(req);
 		const {start, end} = req.body;
 		try {
 			const list = await req.em.find(Npc, {isPublic: true});
@@ -171,7 +170,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			npc.age = info.age;
 			npc.gender = info.gender;
 			npc.race = info.race;
-			npc.hairColor = info.haircolor;
+			npc.hairColor = info.hairColor;
 			npc.height = info.height;
 			npc.background = info.background;
 			npc.notes = info.notes;

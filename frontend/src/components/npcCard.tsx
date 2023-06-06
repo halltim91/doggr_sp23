@@ -1,16 +1,20 @@
 import '../style/card.css';
+import { INpcBody } from "../../../backend/src/types.js";
 
-export const CondensedNpcCard = (props: any) => {
+export const NpcCard = (props: INpcBody) => {
 	return(
-		<div className="card">
+		<div className="condensed-card">
 			<h2 className="header">{props.name}</h2>
-			<h3 className="body">Race: {props.race}</h3>
-			<h3 className="body">Age: {props.age}</h3>
-			<h3 className="body">Gender: {props.gender}</h3>
-			<h3 className="body">Hair Color: {props.haircolor}</h3>
-			<h3 className="body">Eye Color: {props.eyecolor}</h3>
-			<h3 className="body">Height: {props.height}</h3>
+			<h3 className="body">{ props.gender } {props.race}</h3>
+			<h3 className="body">{props.age} Years</h3>
+		</div>
+	);
+}
 
+export const AddNpcCard = () => {
+	return(
+		<div className="condensed-card add-card">
+			<h2>ADD NPC</h2>
 		</div>
 	);
 }

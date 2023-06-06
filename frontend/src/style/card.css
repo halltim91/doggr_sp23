@@ -1,23 +1,32 @@
-.card {
-    display: block;
+.condensed-card {
+    display: flex;
     background-color: #213547;
-    padding: 0;
+    /*width: 90%;*/
+    /*height: 75%;*/
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
-    border: 1px solid green;
+    align-self: center;
+    justify-self: center;
 }
 
-.card .header {
-    display: block;
-    text-align: left;
-    padding-left: 5%;
-    MARGIN: 0;
+.condensed-card .header {
+    display: flex;
+    text-align: center;
     background-color: purple;
 
 }
 
-.card .body {
-    display: block;
-    text-align: left;
-    border: 1px solid orange;
-    margin-top: 5%;
+.condensed-card .body {
+    display: flex;
+    text-align: center;
+    margin: auto;
+}
+
+.add-card {
+    display: flex;
+}
+
+.add-card h2{
+    margin: auto;
 }

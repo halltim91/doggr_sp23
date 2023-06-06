@@ -10,15 +10,3 @@ export const Header = () => {
 		</div>
 	</div> );
 }
-
-export const Footer = () =>{
-	return (<div className="footer">
-		<div className="navigation">
-			<button>First</button>
-			<button>Previous</button>
-			<p id="pageOf">X of XX</p>
-			<button>Next</button>
-			<button>Last</button>
-		</div>
-	</div>);
-}

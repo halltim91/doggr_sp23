@@ -64,11 +64,66 @@ body {
 /*******************************************************************************
 * NPC list
 *******************************************************************************/
-.npcList {
-    flex: 1;
-    grid-area: content;
-    background-color: aquamarine;
+.content {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    min-height: 500px;
+    /*overflow-y: auto;*/
+}
+.npcList {
+    display: flex;
+
+    /*background-color: aquamarine;*/
+    height: 100%;
+
+    padding-top: 2vh;
+    overflow-y: scroll;
+}
+
+.test {
+    display: flex;
+    /*visibility: hidden;*/
+    /*display: none;*/
+    /*width: 50%;*/
+    border: 2px dashed green;
+    flex: 1;
+}
+
+table {
+    border: 2px red dashed;
+    flex: 1;
+}
+
+.content th{
+    background-color: orange;
+}
+
+.content td, th {
+    padding: 0.5rem;
+}
+.content table {
+    border-collapse: collapse;
+}
+
+tr, th {
+    border-bottom: 1px solid;
+}
+
+.row:hover {
+    background-color: yellow;
+}
+
+td:nth-child(1){
+    text-align: left;
+    padding-left: 3vw;
+}
+
+tr:nth-child(even) {
+    background-color: var(--bkg);
+}
+tr:nth-child(odd) {
+    background-color: var(--fg);
 }
 
 

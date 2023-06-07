@@ -1,15 +1,16 @@
 import './style/App.css';
-import { Footer, Header } from "./components/components";
-import {NpcList} from "./components/NpcList.tsx";
-import {NpcCard} from "./components/npcCard";
+import { Routes, Route } from "react-router-dom";
+import { MainPage } from "./components/MainPage.tsx";
 
 function App() {
+
   return (
-    <div className="App">
-      <Header />
-      <NpcList />
-      {/*<Footer />*/}
-    </div> );
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<MainPage />}/>
+          <Route path="/user" element={<MainPage />} />
+        </Routes>
+      </div>);
 }
 
 export default App;

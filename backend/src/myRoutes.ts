@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { IUserBody, INpcBody} from "./types.js";
 import { User } from "./db/entities/User.js";
 import { Npc } from "./db/entities/Npc.js";
+import {creatuserWithEmailAndPassword } from "firebase/auth";
+
 async function NpcRoutes(app: FastifyInstance, _options ={}){
 	if(!app){
 		throw new Error("Fastify instance has no value during routes construction");
@@ -181,6 +183,16 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		} catch(err){
 			console.log("Failed to update npc", err);
 			reply.status(500).send(err);
+		}
+	});
+	app.post<{Body: {email: string, pword: string}}>("/signup", async (req, reply) => {
+		const {email, pword} = req.body;
+		try {
+			const response = await app.firebase.createUserWithEmailAndPassword(email, pword);
+			reply.send(response);
+		} catch(err) {
+			console.log(err.message);
+			reply.status(500).send(err.message);
 		}
 	});
 }

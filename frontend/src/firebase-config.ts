@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBUJFXnbeZ4e01yv5IDSpGkViGw7TKQI48",
-  authDomain: "npsee-a9647.firebaseapp.com",
-  projectId: "npsee-a9647",
-  storageBucket: "npsee-a9647.appspot.com",
-  messagingSenderId: "449508238502",
-  appId: "1:449508238502:web:dbda8ae57f1b0e227b4067",
-  measurementId: "G-GS17ZR9KRG"
+  apiKey: import.meta.env.FB_API_KEY,
+  authDomain: import.meta.env.FB_AUTH_DOMAIN,
+  projectId: import.meta.env.FB_PROJ_ID,
+  storageBucket: import.meta.env.FB_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.FB_MESSAGING_SENDER_ID,
+  appId: import.meta.env.FB_APP_ID,
+  measurementId: import.meta.env.FB_MEASUREMENT_ID
 };
 
 export const fbApp = initializeApp(firebaseConfig);

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import {fbApp} from "../firebase-config.ts";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { UserContext } from "../App.tsx";
+import { useNavigate } from "react-router-dom";
 
 type Properties = {
 	title: string,
@@ -11,13 +12,14 @@ type Properties = {
 export const Login = () => {
 	const authentication = getAuth(fbApp);
 	let {user} = useContext(UserContext);
-
+	const navigate = useNavigate();
 	const handleLogin = (email: string, pword: string) => {
 		console.log("login", email, pword)
 		signInWithEmailAndPassword(authentication, email, pword)
 			.then((resp) => {
 				console.log(resp);
 				user = resp.user;
+				navigate("/user");
 			})
 			.catch((err) => {
 				console.log(err.message);

@@ -7,14 +7,18 @@ import { fbApp } from "./firebase-config.ts";
 import { Login } from "./components/Login.tsx";
 import firebase from "firebase/compat";
 import User = firebase.User;
+import Auth = firebase.auth.Auth;
+import { ProtectedRoute } from "./components/components.tsx";
+import { Logout } from "./components/Logout.tsx";
 
 
 
 export type Dat = {
-  user: User
+  user: User,
+  auth: Auth
 }
 
-export const UserContext = createContext<Dat>({user: null});
+export const UserContext = createContext<Dat>({user: null, auth: null});
 
 function App() {
   // frontend firebase app instance created with initializeApp()
@@ -33,12 +37,13 @@ function App() {
   });
 
   return (
-    <UserContext.Provider value={{user: currentUser}}>
+    <UserContext.Provider value={{user: currentUser, auth: auth}}>
       <div className="App">
           <Routes>
             <Route path="/" element={<MainPage />}/>
-            <Route path="/user" element={<MainPage />} />
+            <Route path="/user" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
             <Route path="/login" element={<Login />}/>
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </div>
     </UserContext.Provider>

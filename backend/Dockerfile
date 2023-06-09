@@ -1,6 +1,6 @@
 FROM node:18
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@8.6.0
 
 WORKDIR /app
 COPY package.json .

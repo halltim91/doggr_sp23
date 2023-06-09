@@ -5,15 +5,14 @@ import {User} from "../entities/User.js";
 export class UserSeeder extends Seeder {
 
 	async run(em: EntityManager): Promise<void> {
+
 		em.create(User, {
-			email: "email@email.com",
-			userName: "lurkingTimbo",
-			password: "qwerty1234"
+			email: "someemail@aol.com",
+			uid: "slkdjfsdf908lwer98"
 		});
 		em.create(User, {
-			email: "email2@aol.com",
-			userName: "tableTopLover123",
-			password: "password"
+			email: "email7@aol.com",
+			uid: "slkdjfsl5lkl4kj298"
 		});
 	}
 

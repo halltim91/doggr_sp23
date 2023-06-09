@@ -16,6 +16,5 @@ export type INpcBody = {
 
 export type IUserBody = {
 	email: string,
-	username: string,
-	password: string
+	uid: string
 }

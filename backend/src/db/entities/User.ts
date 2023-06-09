@@ -6,13 +6,10 @@ import { BaseEntity } from "./BaseEntity.js";
 export class User extends BaseEntity {	
 	@Property()
 	@Unique()
-	email!: string;
+	uid!: string;
 
-	@Property({length: 25})
+	@Property()
 	@Unique()
-	userName!: string;
-
-	@Property({length: 16})
-	password!: string;
+	email!: string;
 
 }

@@ -3,6 +3,7 @@ import {fbApp} from "../firebase-config.ts";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { UserContext } from "../App.tsx";
 import { useNavigate } from "react-router-dom";
+import { AddUserService } from "../services/UserService.tsx";
 
 type Properties = {
 	title: string,
@@ -16,14 +17,20 @@ export const Login = () => {
 	const handleLogin = (email: string, pword: string) => {
 		console.log("login", email, pword)
 		signInWithEmailAndPassword(authentication, email, pword)
-			.then((resp) => {
-				console.log(resp);
-				user = resp.user;
-				navigate("/user");
-			})
-			.catch((err) => {
-				console.log(err.message);
-			})
+		.then((resp) => {
+			user = resp.user;
+			return user;
+		})
+		.then((user) => {
+			return AddUserService.send(user.email, user.uid)
+				.then(() => {
+					console.log("User successfully added");
+					navigate("/user");
+				})
+		})
+		.catch((err) => {
+			console.log(err.message);
+		})
 	};
 
 	const handleSignUp = (email: string, pword: string) => {

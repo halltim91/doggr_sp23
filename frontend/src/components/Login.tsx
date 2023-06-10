@@ -19,14 +19,9 @@ export const Login = () => {
 		signInWithEmailAndPassword(authentication, email, pword)
 		.then((resp) => {
 			user = resp.user;
-			return user;
-		})
-		.then((user) => {
-			return AddUserService.send(user.email, user.uid)
-				.then(() => {
-					console.log("User successfully added");
-					navigate("/user");
-				})
+			navigate("/user");
+			console.log(user.uid, "Logged in successfully");
+			console.log(authentication.currentUser?.getIdToken().then((x) => console.log(x)));
 		})
 		.catch((err) => {
 			console.log(err.message);
@@ -37,8 +32,15 @@ export const Login = () => {
 		console.log("signup", email, pword);
 		createUserWithEmailAndPassword(authentication, email, pword)
 			.then((resp) => {
-				console.log(resp);
 				user = resp.user;
+				return user;
+			})
+			.then((user) => {
+				return AddUserService.send(user.email as string, user.uid)
+					.then(() => {
+						console.log("User successfully added");
+						navigate("/user");
+					})
 			})
 			.catch((err) => {
 				console.log(err.message);

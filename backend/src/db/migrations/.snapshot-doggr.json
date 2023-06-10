@@ -35,6 +35,15 @@
           "length": 6,
           "mappedType": "datetime"
         },
+        "uid": {
+          "name": "uid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "email": {
           "name": "email",
           "type": "varchar(255)",
@@ -43,26 +52,6 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
-        },
-        "user_name": {
-          "name": "user_name",
-          "type": "varchar(25)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 25,
-          "mappedType": "string"
-        },
-        "password": {
-          "name": "password",
-          "type": "varchar(16)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 16,
-          "mappedType": "string"
         }
       },
       "name": "users",
@@ -70,19 +59,19 @@
       "indexes": [
         {
           "columnNames": [
-            "email"
+            "uid"
           ],
           "composite": false,
-          "keyName": "users_email_unique",
+          "keyName": "users_uid_unique",
           "primary": false,
           "unique": true
         },
         {
           "columnNames": [
-            "user_name"
+            "email"
           ],
           "composite": false,
-          "keyName": "users_user_name_unique",
+          "keyName": "users_email_unique",
           "primary": false,
           "unique": true
         },
@@ -177,7 +166,6 @@
           "primary": false,
           "nullable": false,
           "length": 25,
-          "default": "''",
           "mappedType": "string"
         },
         "eye_color": {

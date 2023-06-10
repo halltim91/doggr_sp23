@@ -5,17 +5,17 @@ import { createContext, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { fbApp } from "./firebase-config.ts";
 import { Login } from "./components/Login.tsx";
-import firebase from "firebase/compat";
-import User = firebase.User;
-import Auth = firebase.auth.Auth;
+
 import { ProtectedRoute } from "./components/components.tsx";
 import { Logout } from "./components/Logout.tsx";
+import { User } from "firebase/auth";
+import { Auth } from "firebase/auth";
 
 
 
 export type Dat = {
-  user: User,
-  auth: Auth
+  user: User | null,
+  auth: Auth | null
 }
 
 export const UserContext = createContext<Dat>({user: null, auth: null});
@@ -25,7 +25,7 @@ function App() {
   const auth = getAuth(fbApp);
   const [currentUser, setCurrentUser] = useState(null);
 
-  onAuthStateChanged(auth, async (user: User) => {
+  onAuthStateChanged(auth, async (user) => {
     // don't set the user all the time, only when sign in changes
     if (user && !currentUser) {
       console.log("User and not user", user.email);

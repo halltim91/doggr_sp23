@@ -8,29 +8,32 @@ export class Npc extends BaseEntity {
 	@Property({length: 40})
 	name!: string;
 
-	@Property()
-	age: number;
+	@Property({ nullable: true })
+	age?: number;
 
-	@Property({length: 25})
-	gender: string;
+	@Property({length: 25, nullable: true})
+	gender?: string;
 
-	@Property({length: 25})
-	race: string;
+	@Property({length: 25, nullable: true})
+	race?: string;
 
-	@Property({length: 25})
-	hairColor: string;
+	@Property({length: 25, nullable: true})
+	hairColor?: string;
 
-	@Property({length: 25})
-	eyeColor: string;
+	@Property({length: 25, nullable: true})
+	eyeColor?: string;
 
-	@Property({length: 10})
-	height: string;
+	@Property({length: 10, nullable: true})
+	height?: string;
 
-	@Property({length: 1000})
-	background: string;
+	@Property({ nullable: true })
+	weight?: string;
 
-	@Property({length: 1000})
-	notes: string;
+	@Property({length: 1000, nullable: true})
+	background?: string;
+
+	@Property({length: 1000, nullable: true})
+	notes?: string;
 
 	@Property()
 	isPublic: boolean = false;

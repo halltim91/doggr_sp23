@@ -4,10 +4,12 @@ import {TsMorphMetadataProvider} from "@mikro-orm/reflection";
 import {defineConfig} from "@mikro-orm/postgresql";
 import {User} from "./entities/User.js";
 import {Npc} from "./entities/Npc.js";
+import { UserToNpc } from "./entities/UserToNpc.js";
 
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {TSMigrationGenerator} from "@mikro-orm/migrations";
+import { OmegaSeeder } from "./seeders/OmegaSeeder.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,7 +21,7 @@ const migrationsTSPath = path.join(__dirname, "migrations");
 
 export default defineConfig({
 	entities: ['./entities/*.js'],
-	entitiesTs: [User, Npc],
+	entitiesTs: [User, Npc, UserToNpc],
 	tsNode: true,
 	dbName: process.env.DB_NAME,
 	port: Number(process.env.DB_PORT),

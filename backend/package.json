@@ -21,7 +21,7 @@
     "seed:run": "pnpm mikro-orm-esm seeder:run",
     "db:reset": "pnpm schema:drop && pnpm schema:update && pnpm seed:run",
     "startProd": "pnpm migration:up && pnpm start",
-    "docker:update": "docker compose down && docker compose build && docker compose up"
+    "docker:update": "docker compose build backend && docker compose up backend"
   },
   "scriptsComments": {
     "dev": "Runs watcher dev server, see https://github.com/nodejs/node/issues/30810#issuecomment-1446093458 for no-warnings",
@@ -41,6 +41,7 @@
     "fastify": "^4.17.0",
     "fastify-plugin": "^4.5.0",
     "firebase": "^9.22.1",
+    "firebase-admin": "^11.9.0",
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {

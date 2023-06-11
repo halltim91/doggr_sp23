@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { INpcBody} from "./types.js";
 import { User } from "./db/entities/User.js";
 import { Npc } from "./db/entities/Npc.js";
+import verifyToken from "./Tokens.js";
+import { UserToNpc } from "./db/entities/UserToNpc.js";
 
 async function NpcRoutes(app: FastifyInstance, _options ={}){
 	if(!app){
@@ -9,28 +11,40 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	}
 
 	//add npc
-	app.post<{ Body: {token: string, npc: INpcBody }}>("/npcs", async (req, reply) => {
-		const {name, age, gender, race, hairColor, height, background, notes,
-			isPublic, owner} = req.body.npc;
-		const { token } = req.body;
+	app.post<{ Body: {token: string, uid: string, npc: INpcBody }}>("/npcs", async (req, reply) => {
+		const {name, age, gender, race, hairColor, eyeColor, height, weight, background, notes,
+			isPublic} = req.body.npc;
+		const { token, uid } = req.body;
 		try{
+			verifyToken(token, uid);
+
+			const usr = await req.em.findOneOrFail(User, {uid: uid});
+
 			const newNpc = await req.em.create(Npc, {
 				name: name,
 				age: age,
 				gender: gender,
 				race: race,
 				hairColor: hairColor,
+				eyeColor: eyeColor,
 				height: height,
+				weight: weight,
 				background: background,
 				notes:  notes,
 				isPublic: isPublic,
-				owner: owner
+				owner: usr
 			});
+
+			const rel = await req.em.create(UserToNpc, {
+				npc: newNpc,
+				user: usr
+			});
+
 			await req.em.flush();
 			console.log("added NPC: ", newNpc);
 			reply.send(newNpc);
 		} catch (err){
-			console.log("Failed to add new NPC", err);
+			console.log("Failed to add new NPC", err.message);
 			reply.status(500).send(err);
 		}
 	});
@@ -82,52 +96,42 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
-	//delete npc (only from user list if private
-	app.delete<{Body: INpcBody}>("/npc/user", async (req, reply)=> {
-		const {name, owner} = req.body;
-		try{
-			const n = await req.em.findOneOrFail(Npc, {name: name, owner: owner});
-			req.em.remove(n).flush();
-			reply.send(n);
-		} catch (err) {
-			console.log("Failed to delete Npc", err);
-			reply.status(500).send(err);
-		}
-
-	});
+	// //delete npc (only from user list if private
+	// app.delete<{Body: INpcBody}>("/npc/user", async (req, reply)=> {
+	// 	const {name, owner} = req.body;
+	// 	try{
+	// 		const n = await req.em.findOneOrFail(Npc, {name: name, owner: owner});
+	// 		req.em.remove(n).flush();
+	// 		reply.send(n);
+	// 	} catch (err) {
+	// 		console.log("Failed to delete Npc", err);
+	// 		reply.status(500).send(err);
+	// 	}
+	//
+	// });
 
 	// update Npc
-	app.put<{Body: {origName: string, info:INpcBody}}>("/npc/user", async (req, reply) => {
-		const {origName, info} = req.body;
-		try {
-			const npc = await req.em.findOne(Npc, { name: origName,	owner: info.owner });
-			npc.name = info.name;
-			npc.age = info.age;
-			npc.gender = info.gender;
-			npc.race = info.race;
-			npc.hairColor = info.hairColor;
-			npc.height = info.height;
-			npc.background = info.background;
-			npc.notes = info.notes;
-			npc.isPublic = info.isPublic;
-			await req.em.flush();
-			reply.send(npc);
-
-		} catch(err){
-			console.log("Failed to update npc", err);
-			reply.status(500).send(err);
-		}
-	});
-	app.post<{Body: {email: string, pword: string}}>("/signup", async (req, reply) => {
-		const {email, pword} = req.body;
-		try {
-			const response = await app.firebase.createUserWithEmailAndPassword(email, pword);
-			reply.send(response);
-		} catch(err) {
-			console.log(err.message);
-			reply.status(500).send(err.message);
-		}
-	});
+// 	app.put<{Body: {origName: string, info:INpcBody}}>("/npc/user", async (req, reply) => {
+// 		const {origName, info} = req.body;
+// 		try {
+// 			const npc = await req.em.findOne(Npc, { name: origName,	owner: info.owner });
+// 			npc.name = info.name;
+// 			npc.age = info.age;
+// 			npc.gender = info.gender;
+// 			npc.race = info.race;
+// 			npc.hairColor = info.hairColor;
+// 			npc.height = info.height;
+// 			npc.background = info.background;
+// 			npc.notes = info.notes;
+// 			npc.isPublic = info.isPublic;
+// 			await req.em.flush();
+// 			reply.send(npc);
+//
+// 		} catch(err){
+// 			console.log("Failed to update npc", err);
+// 			reply.status(500).send(err);
+// 		}
+// 	});
 }
 
 export default NpcRoutes;

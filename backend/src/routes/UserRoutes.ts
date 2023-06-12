@@ -1,6 +1,7 @@
 import { IUserBody } from "../types";
 import { User } from "../db/entities/User.js";
 import { FastifyInstance } from "fastify";
+import verifyToken from "../Tokens.js";
 
 
 async function UserRoutes(app: FastifyInstance, _options={}) {

@@ -33,7 +33,7 @@ const verifyToken = (token, uid) => {
 			audience: process.env.FB_PROJ_ID,
 			issuer: `https://securetoken.google.com/${process.env.FB_PROJ_ID}`,
 			subject: uid,
-		}).uid;
+		});
 	} catch (error) {
 		throw new Error("Invalid user authentication token", error);
 	}

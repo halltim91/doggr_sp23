@@ -1,0 +1,18 @@
+.npcDetails {
+    width: 50%;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: .3fr 1fr;
+    row-gap: 5%;
+    border: 2px red dashed;
+    overflow-y: auto;
+}
+
+.npcDetails label {
+    margin: 0;
+    padding: 0;
+}
+
+.npcDetails input {
+    padding: 1% 3% 1%;
+}

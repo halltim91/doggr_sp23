@@ -1,35 +1,75 @@
-import { useEffect, useState } from "react";
-import { NumberPublicNpcsService, PublicNpcService } from "../services/NpcService.tsx";
+import { useContext, useEffect, useState } from "react";
+import {
+	NumberPublicNpcsService,
+	NumberUserNpcsService,
+	PublicNpcService,
+	UserNpcService
+} from "../services/NpcService.tsx";
 import {INpcBody} from "../../../backend/src/types.ts";
 import { Footer, Footerstuff } from "./footer.tsx";
+import { UserContext } from "../App.tsx";
+import { useNavigate } from "react-router-dom";
 
-export const NpcList = () => {
+export const NpcList = (props: {isPublic: boolean}) => {
+	const isPublic: boolean = props.isPublic;
 	const cardsPerPage = 25;
 	const [numPages, setNumPages] = useState(0);
 	const [curPage, setCurPage] = useState(0);
 	const [npcs, setNpcs] = useState<INpcBody[]>([]);
+	const { user }= useContext(UserContext);
+	const navigate = useNavigate();
 
-	const fetchNpcCount = () => {
-		NumberPublicNpcsService.send()
-			.then((num) => {
-				console.log("Number of NPCS: ", num.data);
-				setNumPages((Math.ceil(num.data / cardsPerPage)));
-			})
-			.catch((err) => console.error(err));
+	const fetchNpcCount = async () => {
+		if(isPublic){
+			NumberPublicNpcsService.send()
+				.then((num) => {
+					console.log("Number of NPCS: ", num.data);
+					setNumPages((Math.ceil(num.data / cardsPerPage)));
+				})
+				.catch((err) => console.error(err));
+		} else {
+			if (user){
+				const token = await user.getIdToken().then((resp) => resp);
+				NumberUserNpcsService.send(token, user.uid)
+					.then((num)=> {
+						console.log("Number of user NPCS: ", num.data);
+						setNumPages((Math.ceil(num.data/cardsPerPage)));
+					});
+			} else {
+				navigate("/login");
+			}
+		}
 	};
 
-	const fetchNpcs = () => {
+	const fetchNpcs = async () => {
 		const start = curPage * cardsPerPage;
-		const end = (curPage + 1) * cardsPerPage - 1;
-		PublicNpcService.send(start, end)
-			.then((npcs) => setNpcs(npcs.data))
-			.catch((err) => {
-				console.log("Error fetching public npcs between ", start, end, err);
-			});
+		if (isPublic){
+			console.log("loaded public npcs");
+			PublicNpcService.send(start, cardsPerPage)
+				.then((npcs) => setNpcs(npcs.data))
+				.catch((err) => {
+					console.log("Error fetching public npcs", err.message);
+				});
+		} else {
+			if(user){
+				console.log("Loaded private npcs");
+				const token = await user.getIdToken().then((resp) => resp);
+				UserNpcService.send(token, user.uid, start, cardsPerPage)
+					.then((npcs) => setNpcs(npcs.data))
+					.catch((err) => console.log("Error fetching private npcs", err));
+			} else {
+				console.log("Couldn't load private npcs cause user is null");
+			}
+		}
 	};
 
-	const addRow = (n: INpcBody) =>{
-		return (<tr className="row" key={n.name + n.race}>
+	const AddRow = (n: INpcBody) =>{
+		const onclick = () => {
+			console.log("npc", n);
+			navigate("/npc", {state: {npc: n}});
+		}
+
+		return (<tr className="row" key={n.name + n.race} onClick={onclick}>
 			<td> {n.name}</td>
 			<td> {n.gender}</td>
 			<td>{n.race}</td>
@@ -74,12 +114,9 @@ export const NpcList = () => {
 					</tr>
 					</thead>
 					<tbody>
-						{npcs.map((n) => addRow(n))}
+						{npcs.map((n) => AddRow(n))}
 					</tbody>
 				</table>
-				<div className="test">
-						Test
-				</div>
 			</div>
 			<Footer{...footerStuff} />
 		</div>);

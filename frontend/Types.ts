@@ -1,5 +1,6 @@
+import { User } from "../backend/src/db/entities/User";
 
-export type INpcBody = {
+export type NpcData = {
 	name: string,
 	age?: number,
 	gender?: string,
@@ -10,10 +11,6 @@ export type INpcBody = {
 	weight?: string,
 	background?: string,
 	notes?: string,
-	isPublic: boolean,
-}
-
-export type IUserBody = {
-	email: string,
-	uid: string
+	isPublic?: boolean,
+	owner: User
 }

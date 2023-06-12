@@ -15,7 +15,6 @@ export const Login = () => {
 	let {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const handleLogin = (email: string, pword: string) => {
-		console.log("login", email, pword)
 		signInWithEmailAndPassword(authentication, email, pword)
 		.then((resp) => {
 			user = resp.user;

@@ -50,13 +50,18 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	});
 
 	// get public npc list
-	app.search<{Body: {start: number, end: number}}>("/npc", async (req, reply) => {
-		const {start, end} = req.body;
+	app.search<{Body: {offset: number, limit: number}}>("/npc", async (req, reply) => {
+		const {offset, limit} = req.body;
 		try {
-			const list = await req.em.find(Npc, {isPublic: true});
-			reply.send(list.slice(start, end));
+			const qb = req.em.createQueryBuilder(Npc, "n");
+			qb.select("*")
+				.where({isPublic: true})
+				.offset(offset)
+				.limit(limit);
+			const res = await qb.execute();
+			reply.send(res);
 		} catch(err) {
-			console.log("Failed to get public npc list between " + start + "-" + end, err);
+			console.log("Failed to get public npc list", err.message);
 			reply.status(500).send(err);
 		}
 	});
@@ -72,29 +77,41 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
-	//get user npc list
-	app.search<{Body: {id: number, start: number, end: number}}>("/npc/user", async (req, reply) => {
-		const {id, start, end} = req.body;
-		try {
-			const list = await req.em.find(Npc, {owner: id});
-			reply.send(list.slice(start, end));
-		} catch(err){
-			console.log("Failed to load users NPC list", err);
-			reply.status(500).send(err);
-		}
-	});
-
 	//get user npc list count
-	app.get<{Params: {id: number}}>("/npc/:id", async (req, reply) => {
-		const { id } = req.params;
+	app.search<{Body: {token: string, uid: string}}>("/npc/user/count", async (req, reply) => {
+		const { token, uid } = req.body;
 		try {
-			const count = await req.em.count(Npc, {owner: id});
+			verifyToken(token, uid);
+			const usr = await req.em.findOneOrFail(User, {uid: uid});
+
+			const count = await req.em.count(Npc, {owner: usr});
 			reply.send(count);
 		} catch(err) {
 			console.log("Failed to get count of public npc list", err);
 			reply.status(500).send(err);
 		}
 	});
+
+	//get user npc list
+	app.search<{Body: {token: string, uid: number, offset: number, limit: number}}>("/npc/user", async (req, reply) => {
+		const {token, uid, offset, limit} = req.body;
+		try {
+			verifyToken(token, uid);
+			const qb = req.em.createQueryBuilder(UserToNpc, "u");
+			qb.select(["u.user", "n.*"])
+				.join("u.npc", "n")
+				.where({"u.user": uid})
+				.offset(offset)
+				.limit(limit);
+			const res = await qb.execute();
+			reply.send(res);
+
+		} catch(err) {
+			console.log("Failed to retrieve user npcs list", err.message);
+			reply.status(500).send(err.message);
+		}
+	});
+
 
 	// //delete npc (only from user list if private
 	// app.delete<{Body: INpcBody}>("/npc/user", async (req, reply)=> {

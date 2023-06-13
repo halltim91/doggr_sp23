@@ -1,16 +1,17 @@
 import { User } from "../backend/src/db/entities/User";
 
 export type NpcData = {
+	id?: number,
 	name: string,
 	age?: number,
 	gender?: string,
 	race?: string,
-	hairColor?: string,
-	eyeColor?: string,
+	hair_color?: string,
+	eye_color?: string,
 	height?: string,
 	weight?: string,
 	background?: string,
 	notes?: string,
-	isPublic?: boolean,
-	owner: User
+	is_public?: boolean,
+	owner: User | null
 }

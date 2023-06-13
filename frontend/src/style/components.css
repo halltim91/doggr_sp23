@@ -90,39 +90,40 @@ body {
     flex: 1;
 }
 
-table {
+.npcList table {
     border: 2px red dashed;
     flex: 1;
 }
 
-.content th{
-    background-color: orange;
-}
-
-.content td, th {
-    padding: 0.5rem;
-}
-.content table {
+.npc-list-table {
     border-collapse: collapse;
 }
 
-tr, th {
+.npc-list-table th{
+    background-color: orange;
+}
+
+.npc-list-table td, th {
+    padding: 0.5rem;
+}
+
+.npc-list-table tr, th {
     border-bottom: 1px solid;
 }
 
-.row:hover {
+.npc-list-table .row:hover {
     background-color: yellow;
 }
 
-td:nth-child(1){
+.npc-list-table td:nth-child(1){
     text-align: left;
     padding-left: 3vw;
 }
 
-tr:nth-child(even) {
+.npc-list-table tr:nth-child(even) {
     background-color: var(--bkg);
 }
-tr:nth-child(odd) {
+.npc-list-table tr:nth-child(odd) {
     background-color: var(--fg);
 }
 

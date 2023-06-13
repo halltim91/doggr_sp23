@@ -1,18 +1,34 @@
 .npcDetails {
-    width: 50%;
-    height: fit-content;
-    display: grid;
-    grid-template-columns: .3fr 1fr;
-    row-gap: 5%;
+    margin: auto;
+    display: block;
     border: 2px red dashed;
     overflow-y: auto;
 }
 
 .npcDetails label {
+    display: table-cell;
     margin: 0;
     padding: 0;
 }
 
 .npcDetails input {
-    padding: 1% 3% 1%;
+    display: table-cell;
+    height: fit-content;
+    border: 1px green solid;
+}
+
+.npcTable {
+    border-collapse: collapse;
+}
+
+.npcTable td {
+    padding: 5px;
+}
+
+.npcTable label, input {
+
+}
+
+.npcTable textarea {
+    text-align: left;
 }

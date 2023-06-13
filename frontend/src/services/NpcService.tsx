@@ -1,4 +1,5 @@
 import { httpClient } from "./HttpClient.tsx";
+import { NpcData } from "../../Types.ts";
 
 export const PublicNpcService = {
 	async send(offset: number, limit: number){
@@ -44,6 +45,24 @@ export const NumberUserNpcsService = {
 				uid: uid
 			}
 		});
+	}
+}
+
+export const AddNpcService = {
+	async send(token: string, uid:string, npc: NpcData){
+		return httpClient.post("/npcs", {token, uid, npc});
+	}
+}
+
+export const AddPublicNpcService = {
+	async send(token: string, uid: string, npc_id: number) {
+		return httpClient.post("/npc/existing", {token, uid, npc_id});
+	}
+}
+
+export const UpdateNpcService = {
+	async send(token: string, uid: string, npc: NpcData) {
+		return httpClient.put("/npc/update", {token, uid, npc});
 	}
 }
 

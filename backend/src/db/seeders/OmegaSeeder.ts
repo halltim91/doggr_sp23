@@ -40,13 +40,13 @@ export class OmegaSeeder extends Seeder {
 				age: 18 + (Math.random() * 53),
 				gender: Math.random() > .5 ? "Male" : "Female",
 				race: "Human",
-				hairColor: "Blonde",
-				eyeColor: "Brown",
+				hair_color: "Blonde",
+				eye_color: "Brown",
 				height: "6'1\"",
 				weight:"150lb",
 				background: "From parts unknown",
 				notes: "Some useful information",
-				isPublic: Math.random() > .35,
+				is_public: Math.random() > .35,
 				owner: usr
 			}));
 		}

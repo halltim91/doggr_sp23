@@ -1,16 +1,17 @@
 
 export type INpcBody = {
+	id?: number,
 	name: string,
 	age?: number,
 	gender?: string,
 	race?: string,
-	hairColor?: string,
-	eyeColor?: string,
+	hair_color?: string,
+	eye_color?: string,
 	height?: string,
 	weight?: string,
 	background?: string,
 	notes?: string,
-	isPublic: boolean,
+	is_public: boolean,
 }
 
 export type IUserBody = {

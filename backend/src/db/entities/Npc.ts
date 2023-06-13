@@ -21,10 +21,10 @@ export class Npc extends BaseEntity {
 	race?: string;
 
 	@Property({length: 25, nullable: true})
-	hairColor?: string;
+	hair_color?: string;
 
 	@Property({length: 25, nullable: true})
-	eyeColor?: string;
+	eye_color?: string;
 
 	@Property({length: 10, nullable: true})
 	height?: string;
@@ -39,7 +39,7 @@ export class Npc extends BaseEntity {
 	notes?: string;
 
 	@Property()
-	isPublic: boolean = false;
+	is_public: boolean = false;
 
 	@ManyToOne()
 	owner!: Reference<User>;

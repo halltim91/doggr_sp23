@@ -12,8 +12,8 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 
 	//add npc
 	app.post<{ Body: {token: string, uid: string, npc: INpcBody }}>("/npcs", async (req, reply) => {
-		const {name, age, gender, race, hairColor, eyeColor, height, weight, background, notes,
-			isPublic} = req.body.npc;
+		const {name, age, gender, race, hair_color, eye_color, height, weight, background, notes,
+			is_public} = req.body.npc;
 		const { token, uid } = req.body;
 		try{
 			verifyToken(token, uid);
@@ -25,13 +25,13 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 				age: age,
 				gender: gender,
 				race: race,
-				hairColor: hairColor,
-				eyeColor: eyeColor,
+				hair_color: hair_color,
+				eye_color: eye_color,
 				height: height,
 				weight: weight,
 				background: background,
 				notes:  notes,
-				isPublic: isPublic,
+				is_public: is_public,
 				owner: usr
 			});
 
@@ -49,13 +49,59 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		}
 	});
 
+	//link existing npc to user
+	app.post<{Body: {token: string, uid: string, npc_id: number}}>("/npc/existing", async (req, reply) => {
+		const {token, uid, npc_id} = req.body;
+
+		try {
+			verifyToken(token, uid);
+			const user = await req.em.findOneOrFail(User, {uid});
+
+			const rel = await req.em.create(UserToNpc, {
+				user: user,
+				npc: npc_id
+			});
+			await req.em.flush();
+			reply.send(rel);
+		} catch (err) {
+			console.log("Failed to link npc to user", err.message);
+			reply.status(500).send(err.message);
+		}
+	});
+
+	//update npc
+	app.put<{Body: {token: string, uid: string, npc: INpcBody}}>("/npc/update", async (req, reply) => {
+		const {token, uid, npc} = req.body;
+		try {
+			verifyToken(token, uid);
+
+			const loaded = await req.em.findOne(Npc, { id: npc.id});
+			loaded.id = npc.id ? npc.id : loaded.id;
+			loaded.name = npc.name ? npc.name : loaded.name;
+			loaded.age = npc.age;
+			loaded.gender = npc.gender;
+			loaded.race = npc.race;
+			loaded.hair_color = npc.hair_color;
+			loaded.eye_color = npc.eye_color;
+			loaded.height = npc.height;
+			loaded.background = npc.background;
+			loaded.notes = npc.notes;
+			loaded.is_public = npc.is_public ? npc.is_public : loaded.is_public;
+			await req.em.flush();
+			reply.send(loaded);
+		} catch(err){
+			console.log("Failed to update npc", err);
+			reply.status(500).send(err);
+		}
+	});
+
 	// get public npc list
 	app.search<{Body: {offset: number, limit: number}}>("/npc", async (req, reply) => {
 		const {offset, limit} = req.body;
 		try {
 			const qb = req.em.createQueryBuilder(Npc, "n");
-			qb.select("*")
-				.where({isPublic: true})
+			qb.select("n.*")
+				.where({is_public: true})
 				.offset(offset)
 				.limit(limit);
 			const res = await qb.execute();
@@ -69,7 +115,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 	//get public npc list count
 	app.get("/npc/count", async (req, reply) => {
 		try {
-			const count = await req.em.count(Npc, {isPublic: true});
+			const count = await req.em.count(Npc, {is_public: true});
 			reply.send(count);
 		} catch(err) {
 			console.log("Failed to get count of public npc list", err);

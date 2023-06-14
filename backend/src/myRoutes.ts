@@ -76,7 +76,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 				loaded.height = npc.height;
 				loaded.background = npc.background;
 				loaded.notes = npc.notes;
-				loaded.is_public = npc.is_public ? npc.is_public : loaded.is_public;
+				loaded.is_public = npc.is_public;
 				loaded.user = loaded.user ? loaded.user : u.uid;
 				addToLikes(req.em, loaded);
 			} else {

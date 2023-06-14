@@ -3,6 +3,7 @@ import { Dictionary, EntityManager } from "@mikro-orm/core";
 import { User } from "../entities/User.js";
 import { Npc } from "../entities/Npc.js";
 import { UserToNpc } from "../entities/UserToNpc.js";
+import { NpcLikes } from "../entities/NpcLikes.js";
 
 
 export class OmegaSeeder extends Seeder {
@@ -10,7 +11,10 @@ export class OmegaSeeder extends Seeder {
 		let i = 0;
 		this.createusers(em)
 			.map((u) => this.createNPCs(em, u, 75, i++)
-				.map((n) => em.create(UserToNpc, {user: u, npc: n})));
+				.map((n) => {
+					this.createUserToNpc(em, u, n);
+					this.addToLikes(em, n);
+				}));
 		return Promise.resolve(undefined);
 	}
 
@@ -31,9 +35,19 @@ export class OmegaSeeder extends Seeder {
 		return usrs;
 	}
 
+	createUserToNpc(em: EntityManager, user, npc): UserToNpc{
+		return em.create(UserToNpc, {
+			user: user.uid,
+			npc: npc,
+			created_at: npc.created_at,
+			updated_at: npc.updated_at
+		});
+	}
+
 
 	createNPCs(em: EntityManager, usr: User, count: number, index: number): Array<Npc> {
 		const npc = new Array<Npc>();
+		const now = Date.now().valueOf();
 		for (let i = 1; i < count; i++) {
 			npc.push(em.create(Npc, {
 				name: "Npc " + (index * count + i),
@@ -47,10 +61,17 @@ export class OmegaSeeder extends Seeder {
 				background: "From parts unknown",
 				notes: "Some useful information",
 				is_public: Math.random() > .35,
-				owner: usr
+				user: usr.uid,
+				updated_at: new Date(now - Math.ceil(Math.random() * 10000000)),
+				created_at: new Date(now - Math.ceil(Math.random() * 10000000))
 			}));
 		}
 		return npc;
+	}
+
+	addToLikes(em: EntityManager, npc) {
+		if(npc.is_public)
+			return em.create(NpcLikes, {npc: npc, likes: Math.floor(Math.random() * 1000)});
 	}
 }
 

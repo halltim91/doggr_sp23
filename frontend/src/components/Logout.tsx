@@ -9,7 +9,7 @@ export function Logout() {
 	const navigate = useNavigate();
 	useEffect(() => {
 		async function processLogout() {
-			if(user){
+			if(user && auth){
 				signOut(auth)
 					.then(() =>{
 						navigate("/");

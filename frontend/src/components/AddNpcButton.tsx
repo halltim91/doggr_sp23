@@ -23,7 +23,6 @@ function newNpc(): NpcData {
 		is_public: false,
 		name: "",
 		notes: "",
-		owner: null,
 		race: "",
 		weight: ""
 	}

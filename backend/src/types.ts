@@ -1,3 +1,4 @@
+import { User } from "./db/entities/User";
 
 export type INpcBody = {
 	id?: number,
@@ -12,6 +13,7 @@ export type INpcBody = {
 	background?: string,
 	notes?: string,
 	is_public: boolean,
+	user?: User;
 }
 
 export type IUserBody = {

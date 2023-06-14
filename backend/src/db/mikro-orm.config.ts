@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {TSMigrationGenerator} from "@mikro-orm/migrations";
 import { OmegaSeeder } from "./seeders/OmegaSeeder.js";
+import { NpcLikes } from "./entities/NpcLikes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,7 +22,7 @@ const migrationsTSPath = path.join(__dirname, "migrations");
 
 export default defineConfig({
 	entities: ['./entities/*.js'],
-	entitiesTs: [User, Npc, UserToNpc],
+	entitiesTs: [User, Npc, UserToNpc, NpcLikes],
 	tsNode: true,
 	dbName: process.env.DB_NAME,
 	port: Number(process.env.DB_PORT),

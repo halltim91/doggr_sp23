@@ -1,5 +1,3 @@
-import { User } from "../backend/src/db/entities/User";
-
 export type NpcData = {
 	id?: number,
 	name: string,
@@ -13,5 +11,6 @@ export type NpcData = {
 	background?: string,
 	notes?: string,
 	is_public?: boolean,
-	owner: User | null
+	likes?: number,
+	user?: string
 }

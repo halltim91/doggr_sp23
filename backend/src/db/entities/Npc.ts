@@ -41,6 +41,7 @@ export class Npc extends BaseEntity {
 	@Property()
 	is_public: boolean = false;
 
-	@ManyToOne()
-	owner!: Reference<User>;
+	@Property()
+	user!: string;
+
 }

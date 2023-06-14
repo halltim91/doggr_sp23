@@ -66,3 +66,15 @@ export const UpdateNpcService = {
 	}
 }
 
+export const DeleteNpcService = {
+	async send(token: string, uid: string, npc: NpcData){
+		return httpClient.request({
+			url: `/npc/${uid}/${npc.id}`,
+			method: "delete",
+			headers: {
+				token: token
+			}
+		})
+	}
+}
+

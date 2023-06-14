@@ -17,7 +17,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 	const cardsPerPage = 25;
 	const [numPages, setNumPages] = useState(0);
 	const [curPage, setCurPage] = useState(0);
-	const [npcs, setNpcs] = useState<NpcData[]>([]);
+	const [npcs, setNpcs] = useState([] as NpcData[]);
 	const { user }= useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 			console.log("loaded public npcs");
 			PublicNpcService.send(start, cardsPerPage)
 				.then((npcs) => {
-					setNpcs(npcs.data)
+					setNpcs(npcs.data as NpcData[])
 					console.log(npcs.data)
 				})
 				.catch((err) => {
@@ -61,7 +61,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 				const token = await user.getIdToken().then((resp) => resp);
 				UserNpcService.send(token, user.uid, start, cardsPerPage)
 					.then((npcs) => {
-						setNpcs(npcs.data);
+						setNpcs(npcs.data as NpcData[]);
 						console.log(npcs.data)
 					})
 					.catch((err) => console.log("Error fetching private npcs", err));
@@ -77,14 +77,14 @@ export const NpcList = (props: {isPublic: boolean}) => {
 			navigate("/npc", {state: {s_npc: n, mode: mode}});
 		}
 
-		return (<tr className="row" key={n.name + n.race} onClick={onclick}>
+		return (<tr className="row" key={Math.random()} onClick={onclick}>
 			<td> {n.name}</td>
 			<td> {n.gender}</td>
 			<td>{n.race}</td>
 			<td>{n.age}</td>
 			<td>{n.hair_color}</td>
 			<td>{n.eye_color}</td>
-
+			<td> {isPublic ? 	<Likes likes={n.likes!}/> : <></>}</td>
 		</tr>)
 	}
 
@@ -95,7 +95,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 
 	const onNextButtonClick = () => setCurPage(curPage + 1);
 
-	const onLastButtonClick = () => setCurPage(numPages);
+	const onLastButtonClick = () => setCurPage(numPages - 1);
 
 	useEffect(() => {
 		fetchNpcCount();
@@ -133,4 +133,10 @@ export const NpcList = (props: {isPublic: boolean}) => {
 			<Footer{...footerStuff} />
 			{isPublic ? <></> : <AddNpcbutton /> }
 		</div>);
+}
+
+const Likes= (props: {likes: number}) => {
+	return (
+		<label className="likes-label">{props.likes} &#10084;</label>
+	)
 }

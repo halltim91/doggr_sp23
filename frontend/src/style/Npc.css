@@ -1,3 +1,7 @@
+:root {
+    --fa-primary-color: purple;
+}
+
 .npcDetails {
     margin: auto;
     display: block;
@@ -25,10 +29,14 @@
     padding: 5px;
 }
 
-.npcTable label, input {
-
-}
-
 .npcTable textarea {
     text-align: left;
+}
+
+.npcTable td:nth-child(2) {
+    text-align: start;
+}
+
+.npcTable i {
+    background-color: purple;
 }

@@ -23,7 +23,7 @@ export const UserContext = createContext<Dat>({user: null, auth: null});
 function App() {
   // frontend firebase app instance created with initializeApp()
   const auth = getAuth(fbApp);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   onAuthStateChanged(auth, async (user) => {
     // don't set the user all the time, only when sign in changes

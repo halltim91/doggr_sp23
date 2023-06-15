@@ -1,5 +1,5 @@
 import "../style/Npc.css"
-import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../App.tsx";
 import { NpcData } from "../../Types.ts";
@@ -11,17 +11,18 @@ export const NpcInfo = () => {
 	const { state } = useLocation();
 	const { s_npc } = state;
 	const [npc, setnpc] = useState<NpcData>(s_npc);
-	let { mode} = state;
-	const { user } = useContext(UserContext);
+	const [mode, setmode] = useState(state.mode);
+	const u = useContext(UserContext).user;
+	const [user, _setuser ] = useState(u);
 	const nav = useNavigate();
 
 	console.log("npc", npc);
 
 	console.log(npc.user, user?.uid, mode);
-	if(npc.user === user?.uid && mode === "view") mode = "edit";
+	if(npc.user === user?.uid && mode === "view") setmode("edit");
 
 	const btnTxt = user ? GetText(mode) : "Log In";
-	const btnFcn = user ? GetFunction(user, npc, setnpc, mode, nav) : () => nav("/login");
+	const btnFcn = user ? GetFunction(user, npc, setnpc, setmode, mode) : () => nav("/login");
 	const dlt = async () => {
 		const tkn = await user!.getIdToken(true).then((r) => r);
 		DeleteNpcService.send(tkn, user!.uid, npc)
@@ -113,7 +114,7 @@ function fillNull(val: any) : string{
 	return val ? val.toString() : "";
 }
 
-function GetFunction(user: User, npc:NpcData, setnpc: (x) => void, mode:string, nav: NavigateFunction): () => void {
+function GetFunction(user: User, npc:NpcData, setnpc: (x) => void, setmode: (z) => void, mode:string): () => void {
 	switch(mode){
 		case "view":
 			console.log("view fcn");
@@ -123,8 +124,9 @@ function GetFunction(user: User, npc:NpcData, setnpc: (x) => void, mode:string, 
 				AddPublicNpcService.send(tkn, user.uid, npc.id!).then((resp) =>{
 					console.log("Added public npc", resp.data);
 					setnpc(resp.data)
-					nav("/npc", {state: {s_npc: resp.data, mode: "edit"}, replace: true});
-				})
+					setmode("edit");
+				}).catch((err) => {console.log("View err:", err.message)});
+
 			};
 		case "add":
 			console.log("add fcn");
@@ -135,7 +137,7 @@ function GetFunction(user: User, npc:NpcData, setnpc: (x) => void, mode:string, 
 					.then((resp) => {
 						console.log("added ", resp.data);
 						setnpc(resp.data);
-						nav("/npc", {state: {s_npc: npc, mode: "edit"}, replace: true});
+						setmode("edit");
 					})
 			};
 		case "edit":
@@ -145,9 +147,9 @@ function GetFunction(user: User, npc:NpcData, setnpc: (x) => void, mode:string, 
 				const tkn = await user.getIdToken(true).then((r) => r);
 				UpdateNpcService.send(tkn, user.uid, npc as NpcData)
 					.then((resp) => {
-						console.log("resp", resp.data);
+						console.log("resp", resp);
 						setnpc(resp.data);
-					})
+					}).catch((err) => {console.log("Edit err:", err.message)});
 			};
 		default:
 			return () => {

@@ -12,6 +12,11 @@ const alphabet = Array.from(Array(26), (v, k) => {
 export default defineConfig(({ command, mode }) => {
   return {
     plugins: [react(), tsconfigPaths()],
+    server: {
+      host: true,
+      port: 5174,
+      show: true
+    },
     test: {
       globals: true,
       environment: "jsdom",

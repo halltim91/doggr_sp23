@@ -82,12 +82,13 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			} else {
 				//create a new copy, delete pointer to public npc
 				console.log("clone");
-				loaded = addNpc(req.em, npc, u, false);
+				loaded = await addNpc(req.em, npc, u, false);
 				const ref = await req.em.findOneOrFail(UserToNpc, { user: uid, npc: npc.id });
 				req.em.remove(ref);
 			}
 
 			await req.em.flush();
+			console.log("loaded:", loaded);
 			reply.send(loaded);
 		} catch(err){
 			console.log("Failed to update npc", err);

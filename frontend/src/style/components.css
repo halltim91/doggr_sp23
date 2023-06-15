@@ -1,8 +1,4 @@
 
-:root {
-    --fg: #080808;
-    --bkg: #2fabc1;
-}
 body {
     overflow: auto;
     height: 100vh;
@@ -28,25 +24,24 @@ body {
 *******************************************************************************/
 
 .header {
+    position: fixed;
+    top: 0;
     display: flex;
     justify-content: space-between;
     width: 100%;
-    background-color: orange;
+    background-color: var(--fg);
     padding: 0;
     margin: 0;
+
 }
 
 .header .title {
     width: 70%;
     text-align: left;
-    padding-left: 2vw;
     margin: 0;
+    padding: 10px 2vw;
 }
 .header .button-div {
-    background-color: darkgray;
-    width: 30%;
-    display: flex;
-    justify-content: space-between;
     margin-right: 2vw;
 }
 
@@ -73,7 +68,6 @@ body {
 }
 .npcList {
     display: flex;
-
     /*background-color: aquamarine;*/
     height: 100%;
 
@@ -81,30 +75,32 @@ body {
     overflow-y: scroll;
 }
 
-.test {
-    display: flex;
-    /*visibility: hidden;*/
-    /*display: none;*/
-    /*width: 50%;*/
-    border: 2px dashed green;
-    flex: 1;
+.npcList h2 {
+    margin: auto;
 }
 
 .npcList table {
-    border: 2px red dashed;
-    flex: 1;
+    flex: 2;
 }
 
 .npc-list-table {
     border-collapse: collapse;
+    margin-bottom: 50px;
+    margin-top: 50px;
 }
 
 .npc-list-table th{
-    background-color: orange;
+    background-color: var(--fg);
+    pading: 0.5rem;
 }
 
 .npc-list-table td, th {
     padding: 0.5rem;
+    font-size: 14pt;
+}
+
+.npc-list-table th {
+    max-height: 20px;
 }
 
 .npc-list-table tr, th {
@@ -112,19 +108,12 @@ body {
 }
 
 .npc-list-table .row:hover {
-    background-color: yellow;
+    background-color: var(--fg);
 }
 
-.npc-list-table td:nth-child(1){
+.npc-list-table td:nth-child(1), th:nth-child(1){
     text-align: left;
     padding-left: 3vw;
-}
-
-.npc-list-table tr:nth-child(even) {
-    background-color: var(--bkg);
-}
-.npc-list-table tr:nth-child(odd) {
-    background-color: var(--fg);
 }
 
 
@@ -132,21 +121,21 @@ body {
 * Footer
 *******************************************************************************/
 .footer {
-    display: block;
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    background-color: orange;
+    background-color: var(--fg);
 }
 .footer .navigation {
     display: flex;
     width: fit-content;
     margin: 0 auto;
-    background-color: salmon;
 }
 
 .footer .navigation button {
     margin: auto 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
     height: fit-content;
 }
 

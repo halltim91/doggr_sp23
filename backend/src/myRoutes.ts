@@ -168,6 +168,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			qb.select(["n.*"])
 				.join("u.npc", "n")
 				.where({"u.user": uid})
+				.orderBy({"n.updated_at": 'DESC'})
 				.offset(offset)
 				.limit(limit);
 			const res = await qb.execute();

@@ -26,7 +26,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 			NumberPublicNpcsService.send()
 				.then((num) => {
 					console.log("Number of NPCS: ", num.data);
-					setNumPages((Math.ceil(num.data / cardsPerPage)));
+					setNumPages(Math.max((Math.ceil(num.data / cardsPerPage)), 1));
 				})
 				.catch((err) => console.error(err));
 		} else {
@@ -35,7 +35,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 				NumberUserNpcsService.send(token, user.uid)
 					.then((num)=> {
 						console.log("Number of user NPCS: ", num.data);
-						setNumPages((Math.ceil(num.data/cardsPerPage)));
+						setNumPages(Math.max((Math.ceil(num.data / cardsPerPage)), 1));
 					});
 			} else {
 				navigate("/login");
@@ -114,6 +114,7 @@ export const NpcList = (props: {isPublic: boolean}) => {
 	return(
 		<div className="content">
 			<div className="npcList">
+				{npcs.length > 0 ?
 				<table className="npc-list-table">
 					<thead>
 					<tr>
@@ -126,9 +127,11 @@ export const NpcList = (props: {isPublic: boolean}) => {
 					</tr>
 					</thead>
 					<tbody>
-						{npcs.map((n) => AddRow(n))}
+					{npcs.map((n) => AddRow(n))}
 					</tbody>
-				</table>
+				</table> :
+					<h2>No Npcs Added Yet!</h2>
+				}
 			</div>
 			<Footer{...footerStuff} />
 			{isPublic ? <></> : <AddNpcbutton /> }

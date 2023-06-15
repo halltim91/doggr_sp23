@@ -1,0 +1,12 @@
+.login {
+
+}
+
+.login .inputs {
+    padding: 20px;
+}
+
+.login .inputs label, input {
+    margin: 5px;
+}
+

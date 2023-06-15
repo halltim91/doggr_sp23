@@ -1,3 +1,4 @@
+import "../style/Login.css"
 import { useContext, useState } from "react";
 import {fbApp} from "../firebase-config.ts";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
@@ -50,17 +51,17 @@ export const Login = () => {
 		const [email, setemail] = useState("");
 		const [pword, setpword] = useState("");
 		return (
-			<div>
+			<div className="login">
 				<div >
 					<h2>{prop.title}</h2>
 				</div>
-				<div>
+				<div className="inputs">
 					<label htmlFor="email">Email:</label>
 					<input type="email" name="email" onChange={(e) => setemail(e.target.value)}/>
 					<label htmlFor="password">Password:</label>
 					<input type="password" name="password" onChange={(e) => setpword(e.target.value)}/>
 				</div>
-				<button title={prop.title} onClick={() => prop.fcn(email, pword)}/>
+				<button type="button" className="btn" value={prop.title} onClick={() => prop.fcn(email, pword)}>{prop.title}</button>
 			</div>
 		);
 	}

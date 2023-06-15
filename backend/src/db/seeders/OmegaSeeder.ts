@@ -62,8 +62,8 @@ export class OmegaSeeder extends Seeder {
 				notes: "Some useful information",
 				is_public: Math.random() > .35,
 				user: usr.uid,
-				updated_at: new Date(now - Math.ceil(Math.random() * 10000000)),
-				created_at: new Date(now - Math.ceil(Math.random() * 10000000))
+				updated_at: new Date(now + (index * count) +  i),
+				created_at: new Date(now - (index * count) + 1)
 			}));
 		}
 		return npc;

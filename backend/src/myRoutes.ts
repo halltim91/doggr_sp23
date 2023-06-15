@@ -64,7 +64,6 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 			let loaded;
 			// if npc is owned by user update it, else create a copy for the use
 			if( user === uid ){
-				console.log("update");
 				loaded = await req.em.findOne(Npc, { id: npc.id});
 				loaded.id = npc.id ? npc.id : loaded.id;
 				loaded.name = npc.name ? npc.name : loaded.name;
@@ -77,7 +76,8 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 				loaded.background = npc.background;
 				loaded.notes = npc.notes;
 				loaded.is_public = npc.is_public;
-				loaded.user = loaded.user ? loaded.user : u.uid;
+				loaded.user =  u.uid;
+
 				addToLikes(req.em, loaded);
 			} else {
 				//create a new copy, delete pointer to public npc
@@ -103,10 +103,10 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		try{
 			verifyToken(token, uid);
 			const npc = await req.em.findOneOrFail(Npc, {id: npcid});
-			const n = await req.em.find(UserToNpc, {npc});
-			await req.em.remove(n);
-			await req.em.flush();
-			reply.send(n);
+			const u2n = await req.em.find(UserToNpc, {npc});
+			await req.em.remove(u2n).flush();
+			await req.em.remove(npc).flush();
+			reply.send(npc);
 		} catch (err) {
 			console.log("Failed to delete Npc", err);
 			reply.status(500).send(err);
@@ -118,7 +118,7 @@ async function NpcRoutes(app: FastifyInstance, _options ={}){
 		const {offset, limit} = req.body;
 		try {
 			const qb = req.em.createQueryBuilder(NpcLikes, "b");
-			qb.select(["n.*", "b.likes"], true)
+			qb.select(["n.*", "b.likes"])
 				.join("b.npc", "n")
 				.where({"n.is_public": true})
 				.orderBy({"n.updated_at": 'DESC'})

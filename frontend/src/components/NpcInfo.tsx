@@ -12,6 +12,7 @@ export const NpcInfo = () => {
 	const { s_npc } = state;
 	const [npc, setnpc] = useState<NpcData>(s_npc);
 	const [mode, setmode] = useState(state.mode);
+	let del = false;
 	const u = useContext(UserContext).user;
 	const [user, _setuser ] = useState(u);
 	const nav = useNavigate();
@@ -19,6 +20,7 @@ export const NpcInfo = () => {
 	console.log("npc", npc);
 
 	console.log(npc.user, user?.uid, mode);
+	del = (npc.user === user?.uid && mode=="edit");
 	if(npc.user === user?.uid && mode === "view") setmode("edit");
 
 	const btnTxt = user ? GetText(mode) : "Log In";
@@ -28,7 +30,7 @@ export const NpcInfo = () => {
 		DeleteNpcService.send(tkn, user!.uid, npc)
 			.then((resp) => {
 				console.log("deleted", resp);
-			})
+			}).catch((err) => console.log("delete err:", err.message));
 	}
 	return(
 		<>
@@ -55,7 +57,7 @@ export const NpcInfo = () => {
 				</table>
 				<BackgroundTextArea setnpc={setnpc} npc={npc} mode={mode}/>
 				<NotesTextArea mode={mode} setnpc={setnpc} npc={npc} />
-				<ButtonPanel acceptText={btnTxt} onAccept={btnFcn} mode={mode} ondelete={dlt}/>
+				<ButtonPanel acceptText={btnTxt} onAccept={btnFcn} del={del} ondelete={dlt}/>
 			</div>
 		</>
 	);
@@ -70,12 +72,12 @@ const Row =(props: {name: string, value: string, mode: string, onChange: (e)=>vo
 	)
 }
 
-const ButtonPanel = (props: {acceptText: string, onAccept: () => void, mode: string, ondelete?: () => void}) =>{
+const ButtonPanel = (props: {acceptText: string, onAccept: () => void, del: boolean, ondelete?: () => void}) =>{
 	const nav = useNavigate();
 	return(
 		<div>
 			<button onClick={() => nav(-1)}>Return</button>
-			{props.mode === "edit" ?
+			{ props.del ?
 				<button onClick={props.ondelete}>Delete</button> :
 				<></>
 			}

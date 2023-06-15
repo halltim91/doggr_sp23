@@ -1,11 +1,6 @@
-:root {
-    --fa-primary-color: purple;
-}
-
 .npcDetails {
     margin: auto;
     display: block;
-    border: 2px red dashed;
     overflow-y: auto;
 }
 
@@ -18,7 +13,7 @@
 .npcDetails input {
     display: table-cell;
     height: fit-content;
-    border: 1px green solid;
+
 }
 
 .npcTable {
@@ -35,8 +30,4 @@
 
 .npcTable td:nth-child(2) {
     text-align: start;
-}
-
-.npcTable i {
-    background-color: purple;
 }
